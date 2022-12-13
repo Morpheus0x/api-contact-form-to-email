@@ -1,0 +1,77 @@
+<!-- hugo preference, add url to action -->
+<form action="/api/contact" method="post" onsubmit="submitForm(event)">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name" required><br>
+  <label for="email">Email:</label><br>
+  <input type="email" id="email" name="email" required><br>
+  <label for="message">Message:</label><br>
+  <textarea id="message" name="message" required></textarea><br>
+  <div class="cf-turnstile" data-sitekey=""></div> <!-- hugo preference site key -->
+  <input type="submit" value="Submit">
+  <div class="loading" style="display: none;">Loading...</div>
+</form>
+<div id="return-message"></div>
+<!-- add optional switch to disable/enable cloudflare turnstile -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  function submitForm(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const xhr = new XMLHttpRequest();
+    xhr.open(form.method, form.action);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.onreadystatechange = () => {
+      const returnMessage = document.getElementById('return-message');
+      const submitButton = form.querySelector('input[type="submit"]');
+      const loadingSpinner = form.querySelector('.loading');
+      submitButton.disabled = false;
+      submitButton.value = 'Submit'
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+      const json = JSON.parse(xhr.responseText);
+      returnMessage.innerHTML = json.msg;
+      returnMessage.className = ''
+      if (xhr.status === 200) {
+        returnMessage.classList.add('success')
+      }
+      if (xhr.status === 400) {
+        returnMessage.classList.add('error')
+      }
+    };
+
+    const submitButton = form.querySelector('input[type="submit"]');
+    const loadingSpinner = form.querySelector('.loading');
+    submitButton.disabled = true;
+    submitButton.value = 'Loading...'
+
+    xhr.send(formData);
+  }
+</script>
+<style>
+  #return-message {
+    font-size: 1em;
+    padding-left: 0.5em;
+    display: none;
+  }
+
+  #return-message.success {
+    color: green;
+    display: block;
+  }
+
+  #return-message.success::before {
+    content: "\2713";
+    margin-right: 0.25em;
+  }
+
+  #return-message.error {
+    color: red;
+    display: block;
+  }
+
+  #return-message.error::before {
+    content: "\274C";
+    margin-right: 0.25em;
+  }
+</style>
