@@ -25,7 +25,7 @@ def contact():
       'response': request.form['cf-turnstile-response']
     })
     if not r.json()['success']:
-      return jsonify({'msg': 'Invalid captcha'}) , 400
+      return jsonify({'error': 2, 'msg': 'Invalid captcha'}) , 400
 
   msg = EmailMessage()
   msg.set_content(request.form['message'])
@@ -40,5 +40,5 @@ def contact():
       smtp.login(config['SMTP_USERNAME'], config['SMTP_PASSWORD'])
       smtp.send_message(msg)
   except: # Exception as e:
-    return jsonify({'msg': 'Error sending mail'}), 400
-  return jsonify({'msg': 'Email sent successfully'}), 200
+    return jsonify({'error': 1, 'msg': 'Error sending mail'}), 400
+  return jsonify({'error': 0, 'msg': 'Email sent successfully'}), 200
