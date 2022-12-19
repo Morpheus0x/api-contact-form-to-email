@@ -34,7 +34,7 @@ def contact():
   msg['Subject'] = request.form['message'][:35] + '...' # TODO: sanitize message to remove newlines and multiple spaces
   msg['From'] = f"{request.form['name']} <{config['EMAIL_SENDER']}>"
   msg['To'] = config['EMAIL_TARGET']
-  msg['Reply-To'] = request.form['email']
+  msg['Reply-To'] = f"{request.form['name']} <{request.form['email']}>"
 
   # send the email
   try:
