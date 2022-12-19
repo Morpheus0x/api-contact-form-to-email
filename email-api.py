@@ -9,7 +9,7 @@ app = Flask(__name__)
 # load the config values from the config file
 config = configparser.ConfigParser()
 config.read('config.ini')
-config = config['CONFIG']
+config = config['EMAIL-API']
 
 # testing route for form
 @app.route('/')
