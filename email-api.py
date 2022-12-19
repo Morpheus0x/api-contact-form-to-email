@@ -3,13 +3,15 @@ import configparser
 import smtplib
 from email.message import EmailMessage
 import requests
-
-app = Flask(__name__)
+from flask_cors import CORS
 
 # load the config values from the config file
 config = configparser.ConfigParser()
 config.read('config.ini')
 config = config['EMAIL-API']
+
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": config['CORS_ORIGIN']}})
 
 # testing route for form
 @app.route('/')
