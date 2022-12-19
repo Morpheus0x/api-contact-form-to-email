@@ -1,2 +1,3 @@
-# hugo-shortcode-contact-form
-Hugo Shortcode that provides a contact form, forwarded via email 
+# api-contact-form-to-email
+Python Flask API that accepts post requests from a html form and forwards it via email.
+The API endpoint is secured via Cloudflare Turnstile in order to protect against spam.
